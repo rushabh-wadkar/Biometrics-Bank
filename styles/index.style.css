@@ -1,0 +1,7 @@
+@import url('https://fonts.googleapis.com/css?family=Gloria+Hallelujah');
+.headerText {
+      font-size: 3em;
+      font-weight: bolder;
+      letter-spacing: 0.2em;
+      font-family: 'Gloria Hallelujah', cursive;
+}

@@ -1,0 +1,14 @@
+{
+  "name": "secure-bank",
+  "version": "1.0.0",
+  "description": "Banking made secure using Biometrics built with AngularJS, PHP, Firebase and FingerPrintScanner API",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Rushabh Wadkar",
+  "license": "MIT",
+  "dependencies": {
+    "live-server": "^1.2.0"
+  }
+}
