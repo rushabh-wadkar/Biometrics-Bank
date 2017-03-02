@@ -4,13 +4,15 @@
       registerModule.component("registerComponent", {
             templateUrl: "./app/views/security/register/register.html",
             controllerAs: "model",
-            controller: function(){
+            controller: function(auth, DbReference, $firebaseArray){
                   var model = this;
                   model.$onInit = function(){
                               model.loadingFingerPrint = false;
+                              model.doneStatus = false;
                   };
 
                   model.confirmReg = function(){
+
                         var options = {
                               hashTracking:false,
                               closeOnConfirm:true,

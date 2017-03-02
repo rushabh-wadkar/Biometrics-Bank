@@ -92,8 +92,12 @@
 <div class="remodal" data-remodal-id="RegisterConfirmModal">
   <button data-remodal-action="close" class="remodal-close"></button>
   <h1>Confirm Registeration</h1>
-  <md-button class="md-raised md-primary" ng-click="model.scan()">Scan FingerPrint</md-button>
-  <center><md-progress-circular ng-show="model.loadingFingerPrint" class="md-hue-2" md-diameter="20px"></md-progress-circular></center>
+  <div class="fingerprintDiv">
+        <div class="breadcrumb">Please scan your Right Hand # <i><strong>Index Finger</strong></i></div>
+        <md-button class="md-raised md-primary" ng-click="model.scan()">Scan FingerPrint</md-button>
+        <center><md-progress-circular ng-show="model.loadingFingerPrint" class="md-hue-2" md-diameter="20px"></md-progress-circular></center>
+ </div>
+
   <br>
-  <button data-remodal-action="confirm" class="remodal-confirm">Done</button>
+  <button data-remodal-action="confirm" ng-show="model.doneStatus" class="remodal-confirm">Done</button>
 </div>
