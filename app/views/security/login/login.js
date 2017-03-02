@@ -4,15 +4,17 @@
       loginModule.component("loginComponent", {
             templateUrl: "app/views/security/login/login.html",
             controllerAs: "model",
-            controller: function(){
+            controller: function($location){
                   var model = this;
 
                   model.$onInit = function(){
-                        console.log("Login Component loaded");
+                        console.log("Application loaded successfully");
                   };
 
                   model.redirectTo = function(strng){
-                              console.log(strng);
+                              if(strng === "register"){
+                                    $location.path("/security/register");
+                              }
                   };
             }
       })

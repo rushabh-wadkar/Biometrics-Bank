@@ -1,7 +1,13 @@
 @import url('https://fonts.googleapis.com/css?family=Gloria+Hallelujah');
+@import url('https://fonts.googleapis.com/css?family=Shadows+Into+Light');
+
 .headerText {
       font-size: 3em;
       font-weight: bolder;
       letter-spacing: 0.2em;
       font-family: 'Gloria Hallelujah', cursive;
+}
+.moduleHeader {
+      font-family: 'Shadows Into Light', cursive;
+      font-size: 3em;
 }
