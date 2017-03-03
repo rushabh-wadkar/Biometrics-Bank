@@ -3,8 +3,11 @@
       var DbReferenceModule = angular.module("SecureBankAPP");
       DbReferenceModule.factory("DbReference", function(rootRef){
                   return {
-                              saveData: function(){
+                              saveUsers: function(){
                                     return rootRef.child("users");
+                              },
+                              saveFP: function(){
+                                    return rootRef.child("fingerprints");
                               }
                   };
       });

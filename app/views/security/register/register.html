@@ -80,17 +80,17 @@
             </div>
             <div class="row">
                   <div class="col-md-4 col-md-offset-4">
-                        <center><md-button class="md-raised md-primary" ng-disabled="userForm.$invalid"  ng-click="model.confirmReg()">
-                          Register
-                        </md-button>
-                  </center>
+                        <center>
+                              <md-button class="md-primary md-raised" ng-disabled="userForm.$invalid" ng-click="model.showConfirm($event)" >
+                                    Register
+                              </md-button>
+                        </center>
                   </div>
             </div>
       </form>
 </div>
 
 <div class="remodal" data-remodal-id="RegisterConfirmModal">
-  <button data-remodal-action="close" class="remodal-close"></button>
   <h1>Confirm Registration</h1>
   <div class="fingerprintDiv">
         <div class="breadcrumb">Please scan your Right Hand # <i><strong>Index Finger</strong></i></div>
@@ -112,5 +112,6 @@
        <div class="breadcrumb">Account created successfully! :)</div>
  </div>
   <br>
+  <center><md-progress-circular style="display: none;" id="confirmCircular" class="md-hue-2" md-diameter="20px"></md-progress-circular></center>
   <button ng-click="model.success()" ng-show="model.doneStatus" class="remodal-confirm">Done</button>
 </div>

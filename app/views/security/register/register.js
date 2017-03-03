@@ -4,12 +4,28 @@
       registerModule.component("registerComponent", {
             templateUrl: "./app/views/security/register/register.html",
             controllerAs: "model",
-            controller: function($http, ToastNotify, $location){
+            controller: function($http, ToastNotify, $location, $firebaseArray, DbReference, $mdDialog){
                   var model = this;
                   model.$onInit = function(){
                               model.doneStatus = false;
                   };
 
+                  model.showConfirm = function(ev) {
+                     // Appending dialog to document.body to cover sidenav in docs app
+                     var confirm = $mdDialog.confirm()
+                           .title('Confirm?')
+                           .textContent('Please recheck the input as after this step you won\'t be able to revert back!')
+                           .ariaLabel('Lucky day')
+                           .targetEvent(ev)
+                           .ok('Confirm')
+                           .cancel('No! No! Wait.');
+
+                     $mdDialog.show(confirm).then(function() {
+                           model.confirmReg();
+                     }, function() {
+                           console.log("reverted back");
+                     });
+                   };
                   model.confirmReg = function(){
 
                         var options = {
@@ -25,7 +41,7 @@
                   model.scan = function(){
                         var fpData = Capture();
                         if(fpData){
-                              var fp = fpData.IsoTemplate;
+                              fp = fpData.IsoTemplate;
                               $(".fingerprintDiv").css({visibility:'hidden', display: 'none'})
                               $(".verifyPhoneDiv").css({display: 'block'});
 
@@ -59,15 +75,40 @@
                   };
 
                   model.success = function(){
+
+                        $("#confirmCircular").css({display: 'block'});
+
                               $http.get("lib/OTP/sendsms.php?uid=7588819387&pwd=sagar16&phone="+model.user.contactNumber+"&msg=Thank%20You%20,%20Account%20Successfully%20Created.%20Happy%20Secure%20Banking.").then(function(response){
                                           if(response.data == "true"){
-                                                model.regModal.close();
-                                                document.getElementById("regForm").reset();
-                                                $location.path("/login");
-                                                ToastNotify.showToast("Account created successfully! :)");
+                                                // Initializing firebase here!
+                                                var userAdd = $firebaseArray(DbReference.saveUsers());            //adding user
+                                                userAdd.$add({
+                                                      firstName: model.user.firstName,
+                                                      lastName: model.user.lastName,
+                                                      email: model.user.email,
+                                                      contact: model.user.contactNumber,
+                                                      dob: model.user.birthday,
+                                                      address: model.user.address,
+                                                      pincode: model.user.pincode,
+                                                      gender: model.user.gender,
+                                                      fingerprint: fp
+                                                }).then(function(ref){
+                                                      var id = ref.key;
+
+                                                      var fingerprintAdd = $firebaseArray(DbReference.saveFP());  //saving fp in new node
+                                                      fingerprintAdd.$add({
+                                                            fingerprint: fp,
+                                                            user: id
+                                                      }).then(function(ref){
+                                                            model.regModal.close();
+                                                            document.getElementById("regForm").reset();
+                                                            $location.path("/login");
+                                                            ToastNotify.showToast("Account created successfully! :)");
+                                                      });
+                                                });
+
                                           }
                               });
-
                   };
             }
       });
