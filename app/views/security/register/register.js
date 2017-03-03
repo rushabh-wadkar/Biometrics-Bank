@@ -42,7 +42,7 @@
                         var fpData = Capture();
                         if(fpData){
                               fp = fpData.IsoTemplate;
-                              $(".fingerprintDiv").css({visibility:'hidden', display: 'none'})
+                              $(".fingerprintDiv").css({visibility:'hidden', display: 'none'});
                               $(".verifyPhoneDiv").css({display: 'block'});
 
                               model.otp = Math.floor(Math.random() * 10000000);

@@ -8,6 +8,9 @@
                               },
                               saveFP: function(){
                                     return rootRef.child("fingerprints");
+                              },
+                              getUser: function(key){
+                                    return rootRef.child("users").child(key);
                               }
                   };
       });

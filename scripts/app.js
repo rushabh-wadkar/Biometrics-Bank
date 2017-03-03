@@ -19,6 +19,9 @@
                   .when("/security/register", {
                         template: "<register-component></register-component>"
                   })
+                  .when("/account/dashboard", {
+                        template: "<account-component></account-component>"
+                  })
                   .otherwise({redirectTo: "/security/login"});
       });
 }());

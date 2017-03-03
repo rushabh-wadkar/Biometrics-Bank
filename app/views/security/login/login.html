@@ -24,6 +24,31 @@
             </md-button>
       </div>
 </div>
+
+<div class="remodal" data-remodal-id="loginModal">
+      <button data-remodal-action="close" class="remodal-close"></button>
+      <h1>Login</h1>
+      <hr>
+      <div class="fingerprintDiv">
+            <md-button class="md-raised md-primary" ng-click="model.scan()">Scan FingerPrint</md-button>
+            <hr>
+      </div>
+      <div class="verifyPhoneDiv" style="display:none;">
+            <div class="breadcrumb">OTP was sent to your registered phone number!</div>
+            <div layout-gt-sm="row">
+             <md-input-container class="md-block" flex-gt-sm>
+               <label>OTP</label>
+               <input required name="otp" ng-model="model.user.otp" maxlength="10" />
+             </md-input-container>
+             <md-button class="md-raised md-primary" ng-click="model.verifyOTP(model.user.otp)">Verify OTP</md-button>
+            </div>
+            <div class="hint" ng-show="model.showHints" style="color: red;">Please enter the valid OTP.</div>
+      </div>
+
+      <center><md-progress-circular style="display: none;" id="confirmCircular" class="md-hue-2" md-diameter="20px"></md-progress-circular></center>
+      <button ng-click="model.login()" ng-show="model.doneStatus" class="remodal-confirm">Done</button>
+</div>
+
 <br>
 <hr>
 <br><br>
