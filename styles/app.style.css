@@ -6,7 +6,7 @@ html {
 body {
     overflow-x: hidden;
     width: 100%;
-    font-family: Roboto;
+    font-family: 'Roboto', sans-serif;
 }
 
 ::-webkit-scrollbar
@@ -24,3 +24,5 @@ body {
 {
   background: rgba(255, 73, 89, 0.8);
 }
+
+.ng-scope { height: 100%; }

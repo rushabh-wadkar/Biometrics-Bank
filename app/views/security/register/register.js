@@ -4,7 +4,7 @@
       registerModule.component("registerComponent", {
             templateUrl: "./app/views/security/register/register.html",
             controllerAs: "model",
-            controller: function($http, ToastNotify, $location, $firebaseArray, DbReference, $mdDialog){
+            controller: function($http, ToastNotify, $location, $firebaseArray, DbReference, $mdDialog, auth, rootRef){
                   var model = this;
                   model.$onInit = function(){
                               model.doneStatus = false;
@@ -15,7 +15,7 @@
                      var confirm = $mdDialog.confirm()
                            .title('Confirm?')
                            .textContent('Please recheck the input as after this step you won\'t be able to revert back!')
-                           .ariaLabel('Lucky day')
+                           .ariaLabel('Register')
                            .targetEvent(ev)
                            .ok('Confirm')
                            .cancel('No! No! Wait.');
@@ -70,44 +70,63 @@
                   };
                   model.sendOTP = function(){
                         $http.get("lib/OTP/sendsms.php?uid=7588819387&pwd=sagar16&phone="+model.user.contactNumber+"&msg=Hello "+model.user.firstName+",%20your%20OTP%20for%20the%20secure-bank%20gateway%20is%20"+model.otp+".%20This%20OTP%20is%20valid%20only%20for%205%20mins.").then(function(response){
-                                    console.log(response);
+                                    console.log("Successfully sent OTP");
                         });
                   };
 
                   model.success = function(){
 
-                        $("#confirmCircular").css({display: 'block'});
+                              $("#confirmCircular").css({display: 'block'});
 
-                              $http.get("lib/OTP/sendsms.php?uid=7588819387&pwd=sagar16&phone="+model.user.contactNumber+"&msg=Thank%20You%20,%20Account%20Successfully%20Created.%20Happy%20Secure%20Banking.").then(function(response){
-                                          if(response.data == "true"){
-                                                // Initializing firebase here!
-                                                var userAdd = $firebaseArray(DbReference.saveUsers());            //adding user
-                                                userAdd.$add({
-                                                      firstName: model.user.firstName,
-                                                      lastName: model.user.lastName,
-                                                      email: model.user.email,
-                                                      contact: model.user.contactNumber,
-                                                      dob: model.user.birthday,
-                                                      address: model.user.address,
-                                                      pincode: model.user.pincode,
-                                                      gender: model.user.gender,
-                                                      fingerprint: fp
-                                                }).then(function(ref){
-                                                      var id = ref.key;
 
-                                                      var fingerprintAdd = $firebaseArray(DbReference.saveFP());  //saving fp in new node
-                                                      fingerprintAdd.$add({
-                                                            fingerprint: fp,
-                                                            user: id
-                                                      }).then(function(ref){
-                                                            model.regModal.close();
-                                                            document.getElementById("regForm").reset();
-                                                            $location.path("/login");
-                                                            ToastNotify.showToast("Account created successfully! :)");
-                                                      });
-                                                });
+                              //saving user in firebase authDomain
+                              auth.$createUserWithEmailAndPassword(model.user.email, model.user.contactNumber)
+                                .then(function(firebaseUser) {
 
-                                          }
+                                    var userInfo = {
+                                          firstName: model.user.firstName,
+                                          lastName: model.user.lastName,
+                                          email: model.user.email,
+                                          contact: model.user.contactNumber,
+                                          dob: model.user.birthday,
+                                          address: model.user.address,
+                                          pincode: model.user.pincode,
+                                          gender: model.user.gender,
+                                          fingerprint: fp
+                                    };
+
+                                    var userAdd = rootRef;            //adding user
+                                    userAdd.child("users/"+firebaseUser.uid).set(userInfo);
+
+                                          var fingerprintAdd = $firebaseArray(DbReference.saveFP());  //saving fp in new node
+                                          fingerprintAdd.$add({
+                                                fingerprint: fp,
+                                                user: firebaseUser.uid
+                                          }).then(function(ref){
+
+                                                            //sending sms for successfull account creation
+                                                            $http.get("lib/OTP/sendsms.php?uid=7588819387&pwd=sagar16&phone="+model.user.contactNumber+"&msg=Thank%20You%20,%20Account%20Successfully%20Created.%20Happy%20Secure%20Banking.").then(function(response){
+                                                                        if(response.data == "true"){
+                                                                              console.log("Account created successfully");
+                                                                        }
+                                                            });
+
+                                                        $(".fingerprintDiv").css({visibility:'visible', display: 'block'});
+                                                        model.regModal.close();
+                                                        document.getElementById("regForm").reset();
+                                                        $location.path("/login");
+                                                        ToastNotify.showToast("Account created successfully! :)");
+                                          });
+                              }).catch(function(error) {
+                                    if(error.code == "auth/email-already-in-use")
+                                    {
+                                           model.regModal.close();
+                                           document.getElementById("regForm").reset();
+                                           $location.path("/login");
+                                           ToastNotify.showToast("Email address is already registered. Please login");
+                                    } else {
+                                          console.error("Error: ", error);
+                                    }
                               });
                   };
             }

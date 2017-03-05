@@ -37,7 +37,7 @@
                   $mdToast.simple()
                     .textContent(text)
                     .position(pinTo )
-                    .hideDelay(3000)
+                    .hideDelay(2000)
                 );
               };
 

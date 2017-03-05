@@ -1,0 +1,281 @@
+<div layout="row" class="ng-scope">
+      <div flex="24.9">
+            <md-sidenav class="md-sidenav-left" md-component-id="left" md-is-locked-open="$mdMedia('gt-sm')">
+
+                  <md-toolbar class="md-theme-indigo"  md-whiteframe="4">
+                    <center><h1 class="md-toolbar-tools" style="margin: auto">Accounts</h1></center>
+                  </md-toolbar>
+
+                  <md-content>
+                        <md-list flex>
+                              <div layout-padding>
+                                    <md-autocomplete
+                                    md-search-text="model.searchAccount"
+                                    md-items="acc in model.accounts | filter:model.accounts"
+                                    md-item-text="acc.bank"
+                                    md-min-length="0"
+                                    placeholder="Search Bank Account Name">
+                                    </md-autocomplete>
+                              </div>
+                              <br>
+                              <md-divider ></md-divider>
+                              <div class="moduleHeader" style="font-size: 1.3em;" ng-show="model.accounts.length === 0"><br><center>No Accounts</center><hr></div>
+                              <md-list-item class="md-3-line" ng-repeat="acc in model.accounts | orderBy: 'bank' | filter: model.searchAccount" ng-click="model.selectAccount(item)">
+                                    <img ng-src="{{model.bankImage}}" class="md-avatar" alt="{{acc.bank}}" />
+                                    <div class="md-list-item-text" layout="column">
+                                          <h3>{{ acc.bank }}</h3>
+                                          <h4>{{ acc.number }}</h4>
+                                          <p>Balance :{{ acc.balance | currency:" ₹ " }}</p>
+                                    </div>
+                                    <md-divider ></md-divider>
+                              </md-list-item>
+                        </md-list>
+                  </md-content>
+            </md-sidenav>
+      </div>
+      <div layout="column" flex>
+            <md-toolbar>
+                        <div class="md-toolbar-tools"  md-whiteframe="4">
+                                <md-button hide-gt-sm class="md-icon-button" ng-click="model.toggleSideNav()">
+                                  <md-icon md-svg-icon="./assets/svg/menu.svg"></md-icon>
+                                </md-button>
+
+                                <h2 flex>Secure Bank <i><sub><span style="font-size: 0.7em;">Banking made secure!</span></sub></i></h2>
+
+                                <md-fab-speed-dial md-direction="down" class="md-scale md-fab-top-right">
+                                      <md-fab-trigger>
+                                           <md-button class="md-fab">
+                                                 <md-icon md-svg-icon="./assets/svg/menu.svg"></md-icon>
+                                           </md-button>
+                                      </md-fab-trigger>
+                                      <md-fab-actions>
+                                            <a href="#!/security/logout">
+                                                      <md-button aria-label="Logout" class="md-fab md-raised md-mini">
+                                                            <md-icon md-svg-src="./assets/svg/exit.svg" aria-label="Logout"></md-icon>
+                                                      </md-button>
+                                            </a>
+                                      </md-fab-actions>
+                                </md-fab-speed-dial>
+                        </div>
+            </md-toolbar>
+            <md-content flex id="content">
+                  <md-tabs md-dynamic-height md-stretch-tabs="always" md-border-bottom selected="2">
+                        <md-tab label="Profile">
+                          <md-content class="md-padding">
+                                <div class="profile">
+                                      <div class="row">
+                                            <div class="col-md-1 col-md-offset-5"><img ng-src="{{model.avatar}}" width="100"></div>
+                                      </div>
+                                      <div class="row">
+                                                <md-card md-theme="{{ showDarkTheme ? 'dark-purple' : 'default' }}" md-theme-watch>
+                                                      <md-card-title>
+                                                            <md-card-title-text>
+                                                                  <br>
+                                                                  <span class="md-headline">&nbsp;&nbsp;&nbsp;
+                                                                        <span ng-if="model.user.gender === 'Male'"> MR. </span>
+                                                                        <span ng-if="model.user.gender === 'Female'"> MS. </span>
+                                                                        {{model.user.firstName | uppercase}} {{model.user.lastName | uppercase}}
+                                                                  </span>
+                                                                  <br>
+                                                                  <md-divider></md-divider>
+                                                                  <br>
+                                                                  <div class="row">
+                                                                        <div class="col-md-2 col-md-offset-1">Email :</div>
+                                                                        <div class="col-md-9"><i>{{model.user.email}}</i></div>
+                                                                  </div>
+                                                                  <br>
+                                                                  <div class="row">
+                                                                        <div class="col-md-2 col-md-offset-1">Contact :</div>
+                                                                        <div class="col-md-9"><i>{{model.user.contact}}</i></div>
+                                                                  </div>
+                                                                  <br>
+                                                                  <div class="row">
+                                                                        <div class="col-md-2 col-md-offset-1">Gender :</div>
+                                                                        <div class="col-md-9"><i>{{model.user.gender}}</i></div>
+                                                                  </div>
+                                                                  <br>
+                                                                  <div class="row">
+                                                                        <div class="col-md-2 col-md-offset-1">Address :</div>
+                                                                        <div class="col-md-9"><i>{{model.user.address}}</i></div>
+                                                                  </div>
+                                                                  <br>
+                                                                  <div class="row">
+                                                                        <div class="col-md-2 col-md-offset-1">Pincode :</div>
+                                                                        <div class="col-md-9"><i>{{model.user.pincode}}</i></div>
+                                                                  </div>
+                                                                  <br><br>
+                                                            </md-card-title-text>
+                                                      </md-card-title>
+                                                </md-card>
+                                      </div>
+                                </div>
+                          </md-content>
+                        </md-tab>
+                        <md-tab label="Add Account">
+                          <md-content class="md-padding">
+
+                               <br><div class="moduleHeader" style="font-size: 1.5em;"><center>Add a Bank Account to your Profile.</center></div>
+                               <hr>
+                               <div class="AddAccountDiv">
+                                     <form name="accountForm" id="accountForm">
+                                           <div class="row" >
+                                                 <div class="col-md-6 col-md-offset-3">
+                                                       <div layout-gt-sm="row">
+                                                             <md-input-container class="md-block" flex-gt-sm>
+                                                                   <label>Bank Name</label>
+                                                                   <input ng-model="model.account.bankname" required>
+                                                             </md-input-container>
+                                                       </div>
+                                                 </div>
+                                           </div>
+                                           <div class="row" >
+                                                 <div class="col-md-6 col-md-offset-3">
+                                                       <div layout-gt-sm="row">
+                                                             <md-input-container class="md-block" flex-gt-sm>
+                                                                   <label>Account Number</label>
+                                                                   <input ng-model="model.account.acc_no" required>
+                                                             </md-input-container>
+                                                       </div>
+                                                 </div>
+                                           </div>
+                                           <div class="row" >
+                                                 <div class="col-md-6 col-md-offset-3">
+                                                       <div layout-gt-sm="row">
+                                                             <md-input-container class="md-block" flex-gt-sm>
+                                                                   <label>IFSC Code</label>
+                                                                   <input ng-model="model.account.acc_ifsc" required>
+                                                             </md-input-container>
+                                                             <md-input-container class="md-block" flex-gt-sm>
+                                                                   <label>MICR Code</label>
+                                                                   <input ng-model="model.account.acc_micr" required>
+                                                             </md-input-container>
+                                                       </div>
+                                                 </div>
+                                           </div>
+                                           <div class="row">
+                                                 <div class="col-md-6 col-md-offset-3">
+                                                       <md-input-container class="md-block" flex-gt-sm>
+                                                           <label>Account Name</label>
+                                                           <input name="accountname" ng-model="model.account.name" ng-init="model.account.name=model.user.firstName + ' ' + model.user.lastName" required />
+                                                           <div ng-messages="accountForm.accountname.$error">
+                                                             <div ng-message="required">This is required.</div>
+                                                           </div>
+                                                     </md-input-container>
+                                                 </div>
+                                           </div>
+                                           <div class="row">
+                                                 <div class="col-md-6 col-md-offset-3">
+                                                       <div layout-gt-xs="row">
+                                                             <md-input-container flex="50">
+                                                              <label>Account Type</label>
+                                                              <md-select name="accounttype" ng-model="model.account.type" required>
+                                                                <md-option value="Current">Current</md-option>
+                                                                <md-option value="Savings">Savings</md-option>
+                                                              </md-select>
+                                                              <div ng-messages="accountForm.accounttype.$error">
+                                                                <div ng-message="required">This is required.</div>
+                                                              </div>
+                                                            </md-input-container>
+
+                                                            <md-input-container flex="50">
+                                                              <label>Account Sub-Type</label>
+                                                              <md-select name="accountsubtype" ng-model="model.account.subtype" required>
+                                                                <md-option value="Personal">Personal</md-option>
+                                                                <md-option value="Joint">Joint</md-option>
+                                                                <md-option value="Student">Student</md-option>
+                                                                <md-option value="Senior Citizen">Senior Citizen</md-option>
+                                                              </md-select>
+                                                              <div ng-messages="accountForm.accountsubtype.$error">
+                                                                <div ng-message="required">This is required.</div>
+                                                              </div>
+                                                            </md-input-container>
+                                                       </div>
+                                                 </div>
+                                           </div>
+                                           <div class="row" >
+                                                 <div class="col-md-6 col-md-offset-3">
+                                                       <div layout-gt-sm="row">
+                                                             <md-input-container class="md-block" flex-gt-sm>
+                                                                   <label>Account PIN</label>
+                                                                   <input ng-model="model.account.acc_pin" required>
+                                                             </md-input-container>
+                                                             <md-input-container class="md-block" flex-gt-sm>
+                                                                   <label>Balance</label>
+                                                                   <input ng-model="model.account.balance" required>
+                                                             </md-input-container>
+                                                       </div>
+                                                 </div>
+                                           </div>
+
+                                           <div class="row">
+                                                 <div class="col-md-6 col-md-offset-3">
+                                                       <center>
+                                                             <md-button class="md-primary md-raised" ng-disabled="accountForm.$invalid" ng-click="model.showConfirm($event)">
+                                                                   Add Account!
+                                                             </md-button>
+                                                       </center>
+                                                 </div>
+                                           </div>
+                                     </form>
+                               </div>
+
+                          </md-content>
+                        </md-tab>
+                        <md-tab label="Remove Account">
+                          <md-content class="md-padding">
+                            <br><div class="moduleHeader" style="font-size: 2em;"><center>Remove Bank Account linked?</center></div>
+                            <div class="moduleHeader" style="font-size: 1.5em;" ng-show="model.accounts.length === 0"><br><hr><center>==== No Accounts Found ====</center><hr></div>
+                            <div ng-repeat="acc in model.accounts">
+                                    <md-card md-theme="{{ showDarkTheme ? 'dark-purple' : 'default' }}" md-theme-watch>
+                                          <md-card-title>
+                                                <md-card-title-text>
+                                                      <span class="md-headline">Bank Name : <i>{{ acc.bank }}</i></span>
+                                                      <span class="md-subhead">Account Number : <i>{{acc.number}}</i></span>
+                                                </md-card-title-text>
+                                          </md-card-title>
+                                          <md-card-actions layout="row" layout-align="end center">
+                                                <md-button ng-click="model.removeAccount(acc)">Remove</md-button>
+                                          </md-card-actions>
+                                    </md-card>
+                                    <md-divider></md-divider>
+                            </div>
+                          </md-content>
+                        </md-tab>
+                        <md-tab label="Logs">
+                          <md-content class="md-padding">
+                               <div class="moduleHeader" style="font-size: 1.5em;" ng-show="model.logs.length === 0"><br><hr><center>==== No logs Found ====</center><hr></div>
+                            <div ng-show="model.logs.length!=0">
+                                    <md-toolbar class="md-table-toolbar md-default">
+                                          <div class="md-toolbar-tools">
+                                                <div class="moduleHeader" style="font-size: 1.5em;">
+                                                      Showing logs for your account.
+                                                      <span style="float: right; right: 0;"><md-button ng-click="model.clearLogs($event)">Clear</md-button></span>
+                                                </div>
+                                          </div>
+                                    </md-toolbar>
+
+                                    <md-table-container>
+                                          <table md-table  ng-model="selected">
+                                                <thead md-head>
+                                                      <tr md-row>
+                                                            <th md-column>Logs Text</th>
+                                                            <th md-column>Timestamp</th>
+                                                      </tr>
+                                                </thead>
+                                                <tbody md-body>
+                                                      <tr md-row ng-repeat="log in model.logs | orderBy:'-timestamp'">
+                                                            <td md-cell>{{log.log}}</td>
+                                                            <td md-cell>{{log.timestamp | date:'medium'}}</td>
+                                                      </tr>
+                                                </tbody>
+                                          </table>
+                                    </md-table-container>
+
+                                    <md-table-pagination md-limit="5"  md-limit-options="[5, 10, 15]" md-page="1" md-total="{{model.logs.length}}" md-page-select></md-table-pagination>
+                            </div>
+                          </md-content>
+                        </md-tab>
+                      </md-tabs>
+            </md-content>
+      </div>
+</div>

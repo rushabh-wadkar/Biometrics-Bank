@@ -11,6 +11,12 @@
                               },
                               getUser: function(key){
                                     return rootRef.child("users").child(key);
+                              },
+                              logs: function(uid){
+                                    return rootRef.child("logs").child(uid);
+                              },
+                              getAccounts: function(uid){
+                                    return rootRef.child("accounts").child(uid);
                               }
                   };
       });

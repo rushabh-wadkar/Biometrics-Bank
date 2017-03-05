@@ -4,11 +4,24 @@
       loginModule.component("loginComponent", {
             templateUrl: "app/views/security/login/login.html",
             controllerAs: "model",
-            controller: function($location, DbReference, $firebaseArray, $firebaseObject, $http, ToastNotify){
+            bindings: {
+                        userAuth: "="
+            },
+            controller: function($location, DbReference, $firebaseArray, $firebaseObject, $http, ToastNotify, auth, $route){
                   var model = this;
 
                   model.$onInit = function(){
                         console.log("Application loaded successfully");
+                        if(model.userAuth){
+                              var addLogs = $firebaseArray(DbReference.logs(model.userAuth.uid));
+                              addLogs.$add({
+                                    log: "Logged in",
+                                    timestamp: Date.now()
+                              }).then(function(res){
+                                    $location.path("/account/dashboard");
+                                    ToastNotify.showToast("Welcome back user! :)");
+                              });
+                        }
                   };
 
                   model.redirectTo = function(strng){
@@ -68,7 +81,9 @@
                                                 $(".verifyPhoneDiv").css({display: 'block'});
 
                                                 model.sendOTP(user.firstName, user.contact);
-                                                console.log(model.otp);
+
+                                                email = user.email;
+                                                contact = user.contact;
                                           });
                                     }
                               });
@@ -80,11 +95,26 @@
 
                   model.verifyOTP = function(input){
                         if(input==model.otp){
-                              $(".verifyPhoneDiv").css({display: 'none'});
-                              model.loginModal.close();
-                              $location.path("/account/dashboard");
-                              ToastNotify.showToast("Welcome back user! :)");
-                        }else{
+                              auth.$signInWithEmailAndPassword(email, contact).then(function(firebaseUser) {
+
+                                                var txt = "Logged in.";
+                                                var addLogs = $firebaseArray(DbReference.logs(firebaseUser.uid));
+                                                addLogs.$add({
+                                                      log: txt,
+                                                      timestamp: Date.now()
+                                                }).then(function(res){
+                                                      $(".verifyPhoneDiv").css({display: 'none'});
+                                                      $(".fingerprintDiv").css({visibility:'visible', display: 'block'});
+                                                      model.user.otp = "";
+                                                      model.loginModal.close();
+                                                      $location.path("/account/dashboard");
+                                                      $route.reload();
+                                                      ToastNotify.showToast("Welcome back user! :)");
+                                                });
+                                          }).catch(function(error) {
+                                            console.error("Authentication failed:", error);
+                                          });
+                        } else{
                               model.showHints = true;
                         }
                   };
