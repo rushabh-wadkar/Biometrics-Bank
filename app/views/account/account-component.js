@@ -17,7 +17,7 @@
                         accounts: "=",
                         logs: "="
             },
-            controller: function($mdSidenav, auth, DbReference, $mdDialog, $firebaseArray, ToastNotify){
+            controller: function($mdSidenav, auth, DbReference, $mdDialog, $firebaseArray, ToastNotify, $firebaseObject){
                   var model = this;
                   model.bankImage = './assets/svg/money.svg';
                   model.$onInit = function(){
@@ -34,10 +34,25 @@
                   };
 
                   model.selectAccount = function(acc){
+
                         var sideNav = $mdSidenav('left');
                         if(sideNav.isOpen()){
                               sideNav.close();
                         }
+                        model.accountModal = $('[data-remodal-id=accountModal]').remodal({
+                              hashTracking:false,
+                              closeOnConfirm: true
+                        });
+                        var uidKey = auth.$getAuth();
+                        var keyId = acc.$id;
+
+                        $("#confirmCircular").css({display: 'block'});
+                        var getAccountRef = $firebaseObject(DbReference.getAccount(uidKey.uid, keyId));
+                        getAccountRef.$loaded().then(function(res){
+                              $("#confirmCircular").css({display: 'none'});
+                              model.response = res;
+                        });
+                        model.accountModal.open();
                   };
 
                   model.showConfirm = function(ev) {
@@ -62,15 +77,15 @@
                               var uidRef = auth.$getAuth();
                               var addRef = $firebaseArray(DbReference.getAccounts(uidRef.uid));
                               addRef.$add({
-                                          number: model.account.acc_no,
+                                          number: model.account.acc_no.toUpperCase(),
                                           iFSC: model.account.acc_ifsc,
                                           mICR: model.account.acc_micr,
-                                          accountName: model.account.name,
+                                          accountName: model.account.name.toUpperCase(),
                                           type: model.account.type,
                                           subtype: model.account.subtype,
                                           pin: model.account.acc_pin,
                                           balance: model.account.balance,
-                                          bank: model.account.bankname
+                                          bank: model.account.bankname.toUpperCase()
                               }).then(function(){
 
                                     var addLogs = $firebaseArray(DbReference.logs(model.userAuth.uid));

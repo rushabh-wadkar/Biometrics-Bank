@@ -40,7 +40,7 @@
                   };
                   model.sendOTP = function(username, number){
                         $http.get("lib/OTP/sendsms.php?uid=7588819387&pwd=sagar16&phone="+number+"&msg=Hello "+username+",%20your%20OTP%20for%20the%20secure-bank%20gateway%20is%20"+model.otp+".%20This%20OTP%20is%20valid%20only%20for%205%20mins.").then(function(response){
-                                    console.log(response);
+                                    console.log("OTP Sent");
                         });
                   };
 
@@ -94,7 +94,9 @@
                   };
 
                   model.verifyOTP = function(input){
+                        $("#confirmCircular").css({display: 'block'});
                         if(input==model.otp){
+                              model.otp = "";
                               auth.$signInWithEmailAndPassword(email, contact).then(function(firebaseUser) {
 
                                                 var txt = "Logged in.";
@@ -104,18 +106,20 @@
                                                       timestamp: Date.now()
                                                 }).then(function(res){
                                                       $(".verifyPhoneDiv").css({display: 'none'});
+                                                      $("#confirmCircular").css({display: 'none'});
                                                       $(".fingerprintDiv").css({visibility:'visible', display: 'block'});
                                                       model.user.otp = "";
                                                       model.loginModal.close();
                                                       $location.path("/account/dashboard");
-                                                      $route.reload();
                                                       ToastNotify.showToast("Welcome back user! :)");
                                                 });
                                           }).catch(function(error) {
-                                            console.error("Authentication failed:", error);
+                                                  console.error("Authentication failed:", error);
+                                                  $("#confirmCircular").css({display: 'none'});
                                           });
                         } else{
                               model.showHints = true;
+                              $("#confirmCircular").css({display: 'none'});
                         }
                   };
             }

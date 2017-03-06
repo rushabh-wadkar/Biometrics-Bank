@@ -107,7 +107,14 @@
                                                             //sending sms for successfull account creation
                                                             $http.get("lib/OTP/sendsms.php?uid=7588819387&pwd=sagar16&phone="+model.user.contactNumber+"&msg=Thank%20You%20,%20Account%20Successfully%20Created.%20Happy%20Secure%20Banking.").then(function(response){
                                                                         if(response.data == "true"){
-                                                                              console.log("Account created successfully");
+
+                                                                              var addLogs = $firebaseArray(DbReference.logs(firebaseUser.uid));
+                                                                              addLogs.$add({
+                                                                                    log: "Successfully registered.",
+                                                                                    timestamp: Date.now()
+                                                                              }).then(function(res){
+                                                                                    console.log("Account created successfully");
+                                                                              });
                                                                         }
                                                             });
 

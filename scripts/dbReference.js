@@ -17,6 +17,9 @@
                               },
                               getAccounts: function(uid){
                                     return rootRef.child("accounts").child(uid);
+                              },
+                              getAccount: function(uid, key){
+                                    return rootRef.child("accounts").child(uid).child(key);
                               }
                   };
       });
