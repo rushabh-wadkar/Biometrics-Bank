@@ -7,6 +7,7 @@
                   </md-toolbar>
 
                   <md-content>
+                        <center><span ng-hide="model.accounts.length === 0"><br>Total Balance : <strong>{{model.bal.sum() | currency:" ₹ "}}</strong><br><br><md-divider ></md-divider></span></center>
                         <md-list flex>
                               <div layout-padding>
                                     <md-autocomplete
@@ -75,7 +76,9 @@
                                                                         <span ng-if="model.user.gender === 'Male'"> MR. </span>
                                                                         <span ng-if="model.user.gender === 'Female'"> MS. </span>
                                                                         {{model.user.firstName | uppercase}} {{model.user.lastName | uppercase}}
+                                                                        <span style="float: right; font-size: 0.7em;">Balance : {{model.bal.sum() | currency:" ₹ "}}</span>
                                                                   </span>
+
                                                                   <br>
                                                                   <md-divider></md-divider>
                                                                   <br>
@@ -240,101 +243,6 @@
                                     <md-divider></md-divider>
                             </div>
                             <br><hr><br>
-                          </md-content>
-                        </md-tab>
-
-                        <md-tab label="Edit Profile">
-                          <md-content class="md-padding">
-                            <br><div class="moduleHeader" style="font-size: 2em;"><center>Edit your profile here!</center></div>
-                            <div>
-                                  <div class="RegisterFormDiv">
-                                        <form name="userForm" id="regForm">
-                                              <div class="row" >
-                                                    <div class="col-md-6 col-md-offset-3">
-                                                          <div layout-gt-sm="row">
-                                                                <md-input-container class="md-block" flex-gt-sm>
-                                                                      <label>First Name</label>
-                                                                      <input ng-model="model.user.firstName">
-                                                                </md-input-container>
-                                                                <md-input-container class="md-block" flex-gt-sm>
-                                                                      <label>Last Name</label>
-                                                                      <input ng-model="model.user.lastName">
-                                                                </md-input-container>
-                                                          </div>
-                                                    </div>
-                                              </div>
-                                              <div class="row">
-                                                    <div class="col-md-6 col-md-offset-3">
-                                                          <md-input-container class="md-block" flex-gt-sm>
-                                                              <label>Email Address</label>
-                                                              <input name="useremail" ng-model="model.user.email" required />
-                                                              <div ng-messages="userForm.useremail.$error">
-                                                                <div ng-message="required">This is required.</div>
-                                                              </div>
-                                                        </md-input-container>
-                                                    </div>
-                                              </div>
-                                              <div class="row">
-                                                    <div class="col-md-6 col-md-offset-3">
-                                                          <div layout-gt-xs="row">
-                                                                <md-input-container class="md-block" flex-gt-xs>
-                                                                      <label>Phone Number</label>
-                                                                     <input name="contactNumber" ng-model="model.user.contact" required ng-pattern="/^[0-9]{10}$/" />
-                                                                </md-input-container>
-
-                                                                <md-input-container>
-                                                                      <label>Enter DOB</label>
-                                                                      <md-datepicker name="dob" ng-model="model.user.birthday" md-open-on-focus required></md-datepicker>
-                                                                </md-input-container>
-                                                          </div>
-                                                    </div>
-                                              </div>
-                                              <div class="row">
-                                                    <div class="col-md-6 col-md-offset-3">
-                                                          <md-input-container class="md-block" flex-gt-sm>
-                                                              <label>Address</label>
-                                                              <input name="useraddress" ng-model="model.user.address" required />
-                                                              <div ng-messages="userForm.useraddress.$error">
-                                                                <div ng-message="required">This is required.</div>
-                                                              </div>
-                                                        </md-input-container>
-                                                    </div>
-                                              </div>
-                                              <div class="row">
-                                                    <div class="col-md-6 col-md-offset-3">
-                                                          <div layout="row">
-                                                            <md-input-container flex="50">
-                                                              <label>Pincode</label>
-                                                              <input required name="pincode" ng-model="model.user.pincode">
-                                                              <div ng-messages="userForm.pincode.$error">
-                                                                <div ng-message="required">This is required.</div>
-                                                              </div>
-                                                            </md-input-container>
-
-                                                            <md-input-container flex="50">
-                                                              <label>Gender</label>
-                                                              <md-select name="type" aria-label="gender" ng-model="model.user.gender" required>
-                                                                <md-option value="Male">Male</md-option>
-                                                                <md-option value="Female">Female</md-option>
-                                                              </md-select>
-                                                              <div ng-messages="userForm.type.$error">
-                                                                <div ng-message="required">This is required.</div>
-                                                              </div>
-                                                            </md-input-container>
-                                                          </div>
-                                                    </div>
-                                              </div>
-                                              <div class="row">
-                                                    <div class="col-md-6 col-md-offset-3">
-                                                          <center>
-                                                                <md-button class="md-primary md-raised" ng-disabled="userForm.$invalid" ng-click="model.showConfirm($event)" >
-                                                                      Register
-                                                                </md-button>
-                                                          </center>
-                                                    </div>
-                                              </div>
-                                        </form>
-                            </div>
                           </md-content>
                         </md-tab>
 

@@ -92,9 +92,20 @@
 
 <div class="remodal" data-remodal-id="RegisterConfirmModal">
   <h1>Confirm Registration</h1>
+  <br><br>
   <div class="fingerprintDiv">
-        <div class="breadcrumb">Please scan your Right Hand # <i><strong>Index Finger</strong></i></div>
-        <md-button class="md-raised md-primary" ng-click="model.scan()">Scan FingerPrint</md-button>
+        <form name="fingerprintform">
+              <md-input-container class="md-block" flex-gt-sm>
+                <label>Give a name for your fingerprint</label>
+                <input required name="fpName" ng-model="model.fingerprint.name" placeholder="Example: My Right Hand! (Min. 5 characters)" md-maxlength="25" />
+                <div ng-messages="fingerprintform.fpName.$error">
+                      <div ng-message="required">Name is required.</div>
+                      <div ng-message="md-maxlength">The name has to be less than 25 characters long.</div>
+                    </div>
+              </md-input-container>
+              <div class="breadcrumb" ng-hide="fingerprintform.fpName.$invalid || model.fingerprint.name.length <=5 ">Now please scan your fingerprint</div>
+              <md-button class="md-raised md-primary" ng-disabled="fingerprintform.fpName.$invalid || model.fingerprint.name.length <= 5" ng-click="model.scan()">Scan FingerPrint</md-button>
+        </form>
  </div>
  <div class="verifyPhoneDiv" style="display:none;">
        <div class="breadcrumb">Now please verify your Phone Number : <i><strong>{{model.user.contactNumber}}</strong></i></div>

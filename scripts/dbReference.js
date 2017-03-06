@@ -23,4 +23,16 @@
                               }
                   };
       });
+
+      DbReferenceModule.factory("calcBalance", function($firebaseArray){
+                  return $firebaseArray.$extend({
+                              sum: function(){
+                                    var total = 0;
+                                    angular.forEach(this.$list, function(res){
+                                                total += res.balance;
+                                    });
+                                    return total;
+                              }
+                  });
+      });
 }());

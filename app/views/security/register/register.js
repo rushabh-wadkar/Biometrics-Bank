@@ -4,7 +4,7 @@
       registerModule.component("registerComponent", {
             templateUrl: "./app/views/security/register/register.html",
             controllerAs: "model",
-            controller: function($http, ToastNotify, $location, $firebaseArray, DbReference, $mdDialog, auth, rootRef){
+            controller: function($http, ToastNotify, $location, $firebaseArray, DbReference, $mdDialog, auth, rootRef, $window){
                   var model = this;
                   model.$onInit = function(){
                               model.doneStatus = false;
@@ -60,12 +60,13 @@
                         }
                   };
                   model.verifyOTP = function(input){
-                        if(input==model.user.otp){
+                        if(input==model.otp){
                               $(".verifyPhoneDiv").css({display: 'none'});
                               $(".finishedAccDiv").css({display: 'block'});
                               model.doneStatus = true;
                         }else{
                               model.showHints = true;
+                              model.doneStatus = false;
                         }
                   };
                   model.sendOTP = function(){
@@ -75,7 +76,6 @@
                   };
 
                   model.success = function(){
-
                               $("#confirmCircular").css({display: 'block'});
 
 
@@ -88,7 +88,7 @@
                                           lastName: model.user.lastName,
                                           email: model.user.email,
                                           contact: model.user.contactNumber,
-                                          dob: model.user.birthday,
+                                          birthday: model.user.birthday,
                                           address: model.user.address,
                                           pincode: model.user.pincode,
                                           gender: model.user.gender,
@@ -101,7 +101,8 @@
                                           var fingerprintAdd = $firebaseArray(DbReference.saveFP());  //saving fp in new node
                                           fingerprintAdd.$add({
                                                 fingerprint: fp,
-                                                user: firebaseUser.uid
+                                                user: firebaseUser.uid,
+                                                name: model.fingerprint.name
                                           }).then(function(ref){
 
                                                             //sending sms for successfull account creation
@@ -121,7 +122,8 @@
                                                         $(".fingerprintDiv").css({visibility:'visible', display: 'block'});
                                                         model.regModal.close();
                                                         document.getElementById("regForm").reset();
-                                                        $location.path("/login");
+                                                        $window.location.reload();
+                                                        $location.path("/account/dashboard");
                                                         ToastNotify.showToast("Account created successfully! :)");
                                           });
                               }).catch(function(error) {

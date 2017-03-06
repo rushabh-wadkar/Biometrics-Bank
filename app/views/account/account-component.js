@@ -15,7 +15,8 @@
                         userAuth: "=",
                         user: "=getUser",
                         accounts: "=",
-                        logs: "="
+                        logs: "=",
+                        bal: "=totalBal"
             },
             controller: function($mdSidenav, auth, DbReference, $mdDialog, $firebaseArray, ToastNotify, $firebaseObject){
                   var model = this;

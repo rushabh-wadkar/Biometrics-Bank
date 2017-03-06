@@ -65,6 +65,7 @@
                                     for(var i=0;i<res.length;i++){
                                           if(Verify(res[i].fingerprint, fp)){
                                                 userKey = res[i].user;
+                                                fpName = res[i].name;
                                                 flag = true;
                                                 break;
                                           }
@@ -74,6 +75,7 @@
                                           $("#confirmCircular").css({display: 'none'});
                                     }else if(flag){
                                           // now if user is found
+
                                           var getUser = $firebaseObject(DbReference.getUser(userKey));
                                           getUser.$loaded().then(function(user){
                                                 $("#confirmCircular").css({display: 'none'});
@@ -84,6 +86,7 @@
 
                                                 email = user.email;
                                                 contact = user.contact;
+                                                fpName = fpName;
                                           });
                                     }
                               });
@@ -99,7 +102,7 @@
                               model.otp = "";
                               auth.$signInWithEmailAndPassword(email, contact).then(function(firebaseUser) {
 
-                                                var txt = "Logged in.";
+                                                var txt = "Logged in using fingerprint : " + fpName;
                                                 var addLogs = $firebaseArray(DbReference.logs(firebaseUser.uid));
                                                 addLogs.$add({
                                                       log: txt,

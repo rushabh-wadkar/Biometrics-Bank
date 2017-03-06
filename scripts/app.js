@@ -35,7 +35,7 @@
                         template: "<register-component></register-component>"
                   })
                   .when("/account/dashboard", {
-                        template: "<account-component user-auth='$resolve.currentAuth' get-user='$resolve.getUser' accounts='$resolve.getAccounts' logs='$resolve.getLogs'></account-component>",
+                        template: "<account-component user-auth='$resolve.currentAuth' get-user='$resolve.getUser' accounts='$resolve.getAccounts' logs='$resolve.getLogs' total-bal='$resolve.getTotalBal'></account-component>",
                         resolve: {
                               currentAuth: function(auth){
                                     return auth.$requireSignIn();
@@ -56,6 +56,12 @@
                                     return auth.$requireSignIn().then(function(){
                                           var uidKey = auth.$getAuth();
                                           return $firebaseArray(DbReference.logs(uidKey.uid)).$loaded();
+                                    });
+                              },
+                              getTotalBal: function(auth, $firebaseArray, DbReference, calcBalance){
+                                    return auth.$requireSignIn().then(function(){
+                                          var uidKey = auth.$getAuth();
+                                          return calcBalance(DbReference.getAccounts(uidKey.uid)).$loaded();
                                     });
                               }
                         }
